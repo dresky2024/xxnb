@@ -1,0 +1,26 @@
+# Имя нашего автоматического процесса
+name: Docker Build and Test
+
+# Робот будет просыпаться каждый раз, когда вы делаете push в ветку main
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-run:
+    # Просим GitHub выделить нам виртуальную машину с чистой Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+    # Шаг 1: Скачиваем ваш код из репозитория на эту виртуалку
+    - name: Check out repository code
+      uses: actions/checkout@v4
+
+    # Шаг 2: Собираем ваш Docker-образ прямо в облаке GitHub
+    - name: Build Docker image
+      run: docker build -t test-checker .
+
+    # Шаг 3: Запускаем контейнер и проверяем работу скрипта
+    - name: Run Docker container
+      run: docker run --rm test-checker
+
